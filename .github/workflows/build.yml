@@ -11,7 +11,7 @@ jobs:
         with:
           combine: true
           target: Win64
-          sdk: nightly
+          bindings-ref: 7f6c2a75742856de88dad354e576dcff8a28e881
       - name: Report build errors
         if: steps.build.outcome == 'failure'
         shell: pwsh
