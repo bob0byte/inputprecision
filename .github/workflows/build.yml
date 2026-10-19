@@ -15,6 +15,7 @@ jobs:
           use-cpm-cache: false
           sdk: nightly
           ccache-variant: ''
+          configure-args: -DSKIP_BUILDING_CODEGEN=OFF
       - name: Report build errors
         if: steps.build.outcome == 'failure'
         shell: pwsh
