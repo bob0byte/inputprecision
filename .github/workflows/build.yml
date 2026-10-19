@@ -11,7 +11,7 @@ jobs:
         with:
           combine: true
           target: Win64
-          bindings-ref: be049399bf9136dc1dab93d5844db9730512a549
+          bindings-ref: f8aec5d1f3df76d840dfd2609f02cef30dc6efdf
           use-cpm-cache: false
           sdk: nightly
           ccache-variant: ''
@@ -20,6 +20,8 @@ jobs:
         shell: pwsh
         run: |
           Write-Output "::error::BINDINGS_ENV=$env:GEODE_BINDINGS_REPO_PATH"
+          if (Test-Path bindings-repo) { Write-Output "::error::BINDINGS_HEAD $(git -C bindings-repo log -1 --format='%h %cs %s')"; Write-Output "::error::MAPPING_DIR $(Test-Path bindings-repo/bindings/include/Geode/mapping) CODEGEN_DIR $(Test-Path bindings-repo/codegen)" }
+          Write-Output "::error::SDK_HEAD $(git -C geode-sdk-clone log -1 --format='%h %cs %s')"
           if (Test-Path build/CMakeCache.txt) { Select-String -Path build/CMakeCache.txt -Pattern "BINDINGS_SOURCE|GEODE_SDK|GD_VERSION" | % { Write-Output "::error::CACHE $($_.Line)" } }
           if (-not (Test-Path build/build.ninja)) {
             $cfg = cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DGEODE_DONT_INSTALL_MODS=ON 2>&1 | Out-String
