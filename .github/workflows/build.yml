@@ -25,7 +25,7 @@ jobs:
           } else {
             $out = "No build folder: CMake configure or SDK setup failed."
           }
-          $lines = $out -split "`n" | Where-Object { $_ -match "error|main.cpp|In file included|instantiation|FAILED" } | Select-Object -First 40
+          $lines = $out -split "`n" | Where-Object { $_ -match "error:|main.cpp:" } | Select-Object -Unique | Select-Object -First 40
           if (-not $lines) { $lines = ($out -split "`n" | Select-Object -Last 25) }
           foreach ($l in $lines) { Write-Output "::error::$($l.Trim())" }
           exit 1
