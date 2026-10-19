@@ -6,9 +6,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: geode-sdk/build-geode-mod@main
+        id: build
+        continue-on-error: true
         with:
           combine: true
           target: Win64
+      - name: Report build errors
+        if: steps.build.outcome == 'failure'
+        shell: pwsh
+        run: |
+          if (Test-Path build) {
+            $out = cmake --build build 2>&1 | Out-String
+          } else {
+            $out = "No build folder: CMake configure or SDK setup failed."
+          }
+          $lines = $out -split "`n" | Where-Object { $_ -match "error|Error|ERROR" } | Select-Object -First 25
+          if (-not $lines) { $lines = ($out -split "`n" | Select-Object -Last 25) }
+          foreach ($l in $lines) { Write-Output "::error::$($l.Trim())" }
+          exit 1
       - uses: actions/upload-artifact@v4
         with:
           name: input-precision
