@@ -211,9 +211,9 @@ $on_mod(Loaded) {
     g_mouse = mod->getSettingValue<bool>("mouse");
     g_pollRate = static_cast<int>(mod->getSettingValue<int64_t>("poll-rate"));
 
-    listenForSettingChanges("enabled", [](bool v) { g_enabled = v; clearQueue(); });
-    listenForSettingChanges("mouse", [](bool v) { g_mouse = v; });
-    listenForSettingChanges("poll-rate", [](int64_t v) { g_pollRate = static_cast<int>(v); });
+    listenForSettingChanges<bool>("enabled", [](bool v) { g_enabled = v; clearQueue(); });
+    listenForSettingChanges<bool>("mouse", [](bool v) { g_mouse = v; });
+    listenForSettingChanges<int64_t>("poll-rate", [](int64_t v) { g_pollRate = static_cast<int>(v); });
 
     if (!g_threadStarted.exchange(true)) {
         std::thread(pollThread).detach();
