@@ -1,0 +1,33 @@
+{
+	"geode": "4.10.0",
+	"gd": {
+		"win": "2.2074"
+	},
+	"id": "bob0byte.input-precision",
+	"name": "Input Precision",
+	"version": "v1.0.0",
+	"developer": "bob0byte",
+	"description": "Registers clicks at their real timestamp on the 240 TPS physics clock, even at 60 or 90 FPS.",
+	"settings": {
+		"enabled": {
+			"type": "bool",
+			"name": "Enabled",
+			"description": "Turn precise input on or off.",
+			"default": true
+		},
+		"poll-rate": {
+			"type": "int",
+			"name": "Poll Rate (Hz)",
+			"description": "How often the input thread checks your keys and mouse. 1000 is plenty; higher uses more CPU.",
+			"default": 1000,
+			"min": 240,
+			"max": 8000
+		},
+		"mouse": {
+			"type": "bool",
+			"name": "Capture Mouse Clicks",
+			"description": "Treat left mouse button as jump.",
+			"default": true
+		}
+	}
+}
