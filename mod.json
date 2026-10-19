@@ -1,7 +1,7 @@
 {
-	"geode": "4.10.0",
+	"geode": "5.10.1",
 	"gd": {
-		"win": "2.2074"
+		"win": "2.2081"
 	},
 	"id": "bob0byte.input-precision",
 	"name": "Input Precision",
