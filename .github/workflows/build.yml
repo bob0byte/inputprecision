@@ -21,6 +21,14 @@ jobs:
         run: |
           Write-Output "::error::BINDINGS_ENV=$env:GEODE_BINDINGS_REPO_PATH"
           if (Test-Path build/CMakeCache.txt) { Select-String -Path build/CMakeCache.txt -Pattern "BINDINGS_SOURCE|GEODE_SDK|GD_VERSION" | % { Write-Output "::error::CACHE $($_.Line)" } }
+          if (-not (Test-Path build/build.ninja)) {
+            $cfg = cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DGEODE_DONT_INSTALL_MODS=ON 2>&1 | Out-String
+            $cl = $cfg -split "`n"
+            for ($i = 0; $i -lt $cl.Length; $i++) {
+              if ($cl[$i] -match "CMake Error|error") { $cl[$i..([Math]::Min($i+6, $cl.Length-1))] | % { if ($_.Trim()) { Write-Output "::error::CFG $($_.Trim())" } } }
+            }
+            exit 1
+          }
           if (Test-Path build) {
             $out = cmake --build build 2>&1 | Out-String
           } else {
